@@ -23,7 +23,6 @@ public static class Moogle
 
         public static Dictionary<string,int> sortedsuggestions;
     
-    
     public static SearchResult Query(string query) 
     {
         // Llamo a los metodos de la clase Reader
@@ -38,7 +37,7 @@ public static class Moogle
         
         // Ordeno mi diccionario de Scores en orden descendente y mi diccionario de sugerencias en orden ascendente 
         var sortedResults = Score.OrderByDescending(pair => pair.Value).Take(3);
-        // Solo interesan los 3 primeros resultados a mostrar o menos.   
+        // Solo interesan los 3 primeros resultados a mostrar, o menos.   
         
         string suggestion = "";
         foreach(var word in Reader.Clean(query)){
