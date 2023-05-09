@@ -33,6 +33,16 @@ namespace MoogleEngine;
         return det;
     }
 
+    static int [,] Transpose (int[,]matrix){
+        int [,] transposed = new int [matrix.GetLength(1),matrix.GetLength(0)];
+        for(int i =0;i<transposed.GetLength(0);i++){
+            for(int j=0;j<transposed.GetLength(1);j++){
+                transposed[i,j]=matrix[j,i];
+            }
+        }
+        return transposed;
+    }
+
     static int[,] Sum(int[,] matrixA, int[,] matrixB){
         int[,] matrixC = new int[matrixA.GetLength(0), matrixA.GetLength(1)];
         if (matrixA.Length != matrixB.Length) throw new Exception("Invalid Dimensions");
