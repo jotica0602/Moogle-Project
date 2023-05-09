@@ -19,9 +19,9 @@ public static class Moogle
         //  Diccionario donde almacenare cada palabra que pueda representar una posible sugerencia a mi busqueda.
         public static Dictionary <string,Dictionary<string,int>> Suggestions = new Dictionary<string, Dictionary<string,int>>();
 
-        public static Dictionary<string,double> sortedResults;
+        public static Dictionary<string,double> sortedResults=null!;
 
-        public static Dictionary<string,int> sortedsuggestions;
+        public static Dictionary<string,int> sortedsuggestions = null!;
     
     public static SearchResult Query(string query) 
     {
