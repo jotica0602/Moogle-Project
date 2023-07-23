@@ -1,0 +1,220 @@
+\documentclass{article}
+
+\usepackage{amsmath,amsthm,amssymb}
+
+
+\usepackage{graphicx}
+
+\usepackage{cite}
+
+
+\begin{document}
+\title{Proyecto de Programación:\\ Licenciatura en Ciencia de la Computación.}
+\author{Jorge Alejandro Echevarría Brunet.}
+\date{}
+\maketitle
+
+% Logo y nombre de la Facultad.
+\begin{figure}[h]
+	% Logo
+	\center
+	\includegraphics[width=2cm]{matcom.jpg}
+	\label{fig:logo}
+
+	% Nombre
+	\begin{center}
+		\Large Facultad de Matemática y Computación.
+	\end{center}
+\end{figure}
+
+\begin{abstract}
+	Moogle! es una aplicación web *totalmente original* desarrollada con tecnología
+	.NET Core 7.0, específicamente usando Blazor como *framework* para la interfaz
+	gráfica, y en el lenguaje C\#, cuyo propósito es buscar inteligentemente un texto
+	en un conjunto de documentos. Para esta búsqueda se ha utilizado un Sistema de
+	Recuperación de Información basado en Modelos Vectoriales.
+\end{abstract}
+
+\section{Arquitectura básica del Proyecto}
+Durante el desarrollo de la aplicación fueron creadas las clases:
+\begin{itemize}
+	\item Reader
+	\item TF-IDF
+	\item Initialize
+	\item Search
+	\item Operators
+	\item Snippet
+\end{itemize}
+
+% Página 2
+\newpage
+Así también como tuvo lugar la edición de otros archivos como fueron:
+\begin{itemize}
+	\item Program.cs
+	\item Moogle.cs
+	\item Index.razor
+\end{itemize}
+
+\section{Flujo de Datos}
+
+\subsection{Preprocesamiento:}
+
+Una vez iniciada la aplicación, se realiza un llamado al método \textbf{Feed} de la clase
+\textbf{Initialize}, perteneciente al namespace \textbf{MoogleEngine} en la clase \textbf{Program}, la cual
+pertenece al namespace \textbf{MoogleServer}. Este método
+tiene como función principal hacer un llamado a todos los métodos de las clases
+\textbf{Reader} y \textbf{TF-IDF}, que trabajan directamente con los diccionarios creados en la clase \textbf{Initialize}.
+\newline
+\newline
+
+Los diccionarios a los que hacemos referencia son:
+\begin{itemize}
+	\item[-] Files
+	\item[-] IDF
+	\item[-] Texts
+\end{itemize}
+\textbf{Estructura interna de cada diccionario:}
+\newline
+\newline
+- Files: Contiene todos los documentos de extensión “.txt’’, las palabras asociadas a cada
+texto y el peso de los mismos. El cálculo de esta norma está dado por la siguiente ecuación
+matemática:
+\newline
+\newline
+$$
+	W_{ij}=\frac{freq_{ij}}{max_{l}freq_{lj}} IDF_{i}
+$$
+\newline
+\newline
+Donde:
+\begin{itemize}
+	\item[.]$W_{ij}$: Representa el peso del término i en el documento j.
+	\item[.]$freq_{ij}$: Representa la frecuencia del término i en el documento j.
+	\item[.]$max_{l}freq_{lj}$: Representa el término l de mayor frecuencia en el documento j.
+	\item[.]$IDF_{i}$: Representa la IDF del término i.
+\end{itemize}
+
+- IDF: Contiene todas las palabras de todos los textos y su Inverse Document Frequency (de ahí las siglas IDF)
+asociada, la cual no es más que una norma para determinar la frecuencia inversa de un término
+dado en todos los documentos donde aparezca. Esta norma se obtiene a partir de la
+siguiente fórmula matemática:
+\newline
+$$
+	IDF_{i}=\lg_{10}{(\frac{N}{n_{i}})}
+$$
+\newline
+Donde:
+\begin{itemize}
+	\item [.]N: Representa la cantidad total de documentos.
+	\item [.]$n_{i}$: Representa la cantidad de documentos donde ocurre el término i.
+\end{itemize}
+
+- Texts: Contiene cada documento de extensión “.txt” y asociado a cada uno su respectivo texto.
+
+
+
+\subsection{Búsqueda:}
+Al introducir la búsqueda (query) deseada y hacer click en el botón “Buscar”, en caso de ser una
+búsqueda \textbf{NO} vacía, se aplicará una normalización a la misma, eliminando todos los
+caracteres especiales no relevantes para el procesamiento, utilizando el método \textbf{Clean} de la
+clase \textbf{Reader}. Luego se ubicará cada palabra normalizada de la query en el
+diccionario \textbf{QueryWeight} mediante el método \textbf{FeedQueryWeight} (ambos pertenecientes a la clase 
+\textbf{Search}), donde a cada palabra se le asociará su peso. El cálculo del peso de cada término de la query 
+está dado por la siguiente fórmula:
+$$
+	W_{ij}=(\alpha +(1-\alpha )\frac{freq_{iq}}{max_{l}freq_{lq}})\lg_{10}{(\frac{N}{n_{i}})}
+$$
+Donde:
+\begin{itemize}
+	\item [.]$W_{ij}$: Representa el peso del término i en la query.
+	\item [.]$freq_{iq}$: Representa la frecuencia del término i en la query.
+	\item [.]$max_{l}freq_{lq}$: Representa el término l de mayor frecuencia en la query.
+\end{itemize}
+Luego se procede a buscar entre los documentos, aquellos que satisfagan total, o al
+menos parcialmente la búsqueda.
+Para ello se emplea la fórmula de Similitud de Cosenos:
+$$
+	Rsim(d_{j},q)=\frac{\sum_{i = 1}^{n} W_{ij} W_{iq}}
+	{\sqrt{\sum_{i = 1}^{n} (W_{ij})^2} \sqrt{\sum_{i = 1}^{n} (W_{iq})^2}}
+$$
+\newpage
+Donde:
+\begin{itemize}
+	\item[.] $Rsim(d_{j},q)$: Representa la puntuación (Score) del documento j con respecto a la query.
+	\item[.] $W_{ij}$: Representa el peso del término i en el documento j.
+	\item[.] $W_{iq}$: Representa el peso del término i en la query.
+\end{itemize}
+
+\section{Operadores}
+Si en alguna palabra de nuestra búsqueda apareciera algún/unos de los operadores
+	[$\sim $ ! $\wedge$ *], estos influirán directamente en el puntaje final de los documentos.
+Haciendo uso del método \textbf{Clean} de la clase \textbf{Operators} se reconocerán dichos operadores y se
+procederá de la siguiente forma en caso de existir algún/unos de ellos:
+\begin{itemize}
+	\item \textbf{!} Operador de \textbf{NO Aparición}: Si alguna palabra presenta este operador, todo documento que
+	      la contenga será automáticamente descartado de los resultados finales.
+	\item \textbf{$\wedge$} Operador de Solo Aparición: Si alguna palabra presenta este operador, todo documento que no
+	      la contenga será automáticamente descartado de los resultados finales.
+	\item \textbf{*} Operador de Importancia: Si alguna palabra presenta este operador, todo documento que
+	      la contenga adquirirá mayor relevancia en dependencia de la cantidad de operadores ‘*’ que la
+	      precedan, para llevar este conteo se utiliza el método \textbf{Charcounter} de la clase \textbf{Operators}.
+	\item \textbf{$\sim $} Operador de Cercanía: Si la palabra que lo posee es la primera de
+	      la búsqueda, este será ignorado puesto que se tienen en cuenta tanto la palabra
+	      precedida del operador de cercanía, como su antecesora. En cualquier otro caso se
+	      determinará la distancia entre ambas palabras mediante el método \textbf{Distance} de la
+	      clase \textbf{Operators}. De ser esta menor o igual a 10 palabras, su puntaje será
+	      considerablemente alto, de no ser así, se tendrá en cuenta al mostrar los
+	      resultados finales.
+\end{itemize}
+
+\newpage
+
+
+
+
+
+\begin{figure}
+
+	\section{Resultados}
+	Una vez ubicados los 3 documentos de mayor puntaje, estos serán mostrados en pantalla en orden de
+	relevancia descendente, precedidos con una línea de texto donde aparezca la
+	palabra introducida en nuestra búsqueda.
+	Para ello se utilizó el método \textbf{Show} de la clase \textbf{Snippet}.\\
+	En caso de realizar una búsqueda donde las coincidencias sean nulas, se ofrecerá en pantalla
+	una sugerencia de búsqueda, la cual será la palabra más parecida a la primera palabra de
+	nuestra búsqueda. Para ello se utilizaron también los métodos de la clase \textbf{Snippet}:
+	\begin{itemize}
+		\item[1-] \textbf{EditDistance}: Función basada en el algoritmo conocido como ”Distancia de
+			Levenshtein”, el cual determina la mínima cantidad de ediciones a realizar para convertir
+			una cadena de caracteres en otra.
+		\item[2-] \textbf{Suggestion}: Función que determina en base a los resultados obtenidos
+			al aplicar el método \textbf{EditDistance}, la palabra con mayor similitud a la primera
+			palabra de nuestra búsqueda.
+	\end{itemize}
+	
+	\section*{Manual de Usuario:}
+	\begin{flushleft}
+		Al iniciar Moogle! y acceder a la página se nos muestra como en la siguiente imagen:
+	\end{flushleft}
+	\begin{center}
+		\includegraphics*[width=10cm]{start.jpg}
+	\end{center}
+\end{figure}
+
+\begin{figure}
+	\section*{¿Cómo realizar una búsqueda con Moogle!?:}
+	\begin{itemize}
+		\item[1-] Escribir en la caja de texto la búsqueda a realizar.
+		\item[2-] Hacer click en el botón Buscar.
+	\end{itemize}
+
+	\includegraphics*[width=16.5cm]{search.jpg}
+	\begin{flushleft}
+		En caso de no encontrar ningún resultado para nuestra búsqueda, podemos hacer click
+		en la sugerencia que muestra la aplicación y así obtendremos un documento que podría
+		estar relacionado con nuestra búsqueda.
+
+	\end{flushleft}
+\end{figure}
+
+\end{document}
