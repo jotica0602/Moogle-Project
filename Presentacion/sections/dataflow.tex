@@ -1,0 +1,75 @@
+\section{Flujo de Datos}
+\subsection{Preprocesamiento}
+
+\begin{frame}
+	\frametitle{Flujo de Datos: Preprocesamiento}
+	Al iniciarse la aplicación se hace un llamado al método \textbf{Feed} de la clase
+	\textbf{Initialize}, el cual es el encargado de llamar a su vez a los métodos
+	correspondientes de las clases \textbf{Reader} y \textbf{TF-IDF}, permitiendo que a la
+	hora de realizar la consulta se hayan calculado los pesos de los términos en cada documento,
+	así tambien como la Frecuencia Inversa de Documento (IDF) de cada uno.
+	\begin{center}
+		\begin{tikzpicture}[->,>=stealth,thick]
+			\node (init) at (0,2) {Initialize};
+			\node (files) at (3,3) {Files};
+			\node (feed) at (2,2) {Feed};
+			\node (idf) at (3,1) {IDF};
+
+			\draw (init) -- (feed);
+			\draw (feed) -- (files);
+			\draw (feed) -- (idf);
+		\end{tikzpicture}
+	\end{center}
+
+\end{frame}
+
+\begin{frame}
+	La IDF de cada término i en el total de documentos
+	N está dada por la fórmula:
+	$$
+		IDF_{i}=\lg_{10}{(\frac{N}{n_{i}})}
+	$$
+	Mientras que el cálculo de pesos de cada término i en el documento j está dado por la
+	fórmula:
+	$$
+		W_{ij}=\frac{freq_{ij}}{max_{l}freq_{lj}} IDF_{i}
+	$$
+\end{frame}
+
+\subsection{Búsqueda}
+
+\begin{frame}{Búsqueda}
+	Al realizar la consulta se le aplica una normalización a sus términos y se le asocia a cada
+	uno su peso mediante la función \textbf{FeedQueryWeight}, perteneciente a la clase \textbf{Search}, 
+	para ello se empleó la fórmula:
+	$$
+		W_{ij}=(\alpha +(1-\alpha )\frac{freq_{iq}}{max_{l}freq_{lq}})\lg_{10}{(\frac{N}{n_{i}})}
+	$$
+	Realizada esta acción se procede a buscar entre los documentos aquellos de mayor
+	relevancia mediante la función \textbf{FeedScore}, también perteneciente a la clase 
+	\textbf{Search}, para determinar la relevancia de cada documento se emplea la fórmula de
+	Similitud de Cosenos, dada por:
+	$$
+		Rsim(d_{j},q)=\frac{\sum_{i = 1}^{n} W_{ij} W_{iq}}
+		{\sqrt{\sum_{i = 1}^{n} (W_{ij})^2} \sqrt{\sum_{i = 1}^{n} (W_{iq})^2}}
+	$$
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\begin{tikzpicture}[->,>=stealth,thick]
+			\node (query) at (-3,2) {Query};
+			\node (qw) at (0,2) {FeedQueryWeight};
+			\node (fs) at (3,2) {FeedScore};
+			\node (br) at (6,2) {Best Results};
+
+			\draw (query) -- (qw);
+			\draw (qw)    -- (fs);
+			\draw (fs) 	  -- (br);
+		\end{tikzpicture}
+	\end{center}
+	En caso de introducir algún/unos de los operadores:
+	\newline
+	[$\sim $ ! $\wedge$ *], estos influirán en el puntaje final de los resultados encontrados.
+	
+\end{frame}

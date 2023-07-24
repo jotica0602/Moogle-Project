@@ -31,9 +31,45 @@
 	Moogle! es una aplicación web *totalmente original* desarrollada con tecnología
 	.NET Core 7.0, específicamente usando Blazor como *framework* para la interfaz
 	gráfica, y en el lenguaje C\#, cuyo propósito es buscar inteligentemente un texto
-	en un conjunto de documentos. Para esta búsqueda se ha utilizado un Sistema de
-	Recuperación de Información basado en Modelos Vectoriales.
+	en un conjunto de documentos.
 \end{abstract}
+
+% Explicar que son los SRI, el Modelo Vectorial y el Modelo Vectorial Ponderado
+
+\section*{Modelos de Recuperación de Información}
+\subsection*{¿Qué es la Recuperación de Información?}
+La recuperación de información es un proceso de comunicación. Es un medio por
+el que los usuarios de un sistema o servicio de información pueden encontrar los documentos,
+registros, imágenes gráficas, o registros de sonido que satisfagan sus necesidades o intereses.
+\newline
+\newline
+Un Modelo de Recuperación de Información (MRI) es el responsable de encontrar información
+relevante, la cual está presente en un registro documental que debe ser almacenado,
+representado, analizado (manipulado) y mantenido.
+\newpage
+\textbf{Existen tres Modelos clásicos de Recuperación de Información}:
+\begin{itemize}
+	\item Booleano: Este modelo tradicionalmente utilizado en bases de datos establece una
+	      relación booleana entre los términos y las consultas de búsqueda. Los documentos son vistos
+	      como conjuntos de términos. La relevancia se basa en la coincidencia exacta entre los
+	      términos de la consulta y los términos en los documentos.
+	\item Vectorial: Este modelo representa los documentos y las consultas como vectores en
+	      un espacio multidimensional, donde cada término corresponde a una dimensión. La relevancia
+	      se determina mediante cálculos de similitud, como la similitud del coseno, entre los
+	      vectores de los documentos y las consultas.
+	\item Probabilístico: Estos modelos utilizan probabilidades para determinar la
+	      relevancia de los documentos. El modelo de lenguaje de probabilidad, por ejemplo,
+	      considera la probabilidad de que un documento genere una consulta o que una consulta
+	      genere un documento, lo que permite calcular la probabilidad de relevancia.
+\end{itemize}
+
+\subsection*{¿Cuál fue modelo fue utilizado para el desarrollo de Moogle!?}
+	El \textbf{Modelo de Espacio Vectorial Ponderado} es una variante del modelo vectorial, en la que se
+	asignan pesos a los términos en función de su importancia relativa. Los pesos comúnmente
+	utilizados son los basados en TF-IDF (frecuencia de término-inversa de frecuencia de documento),
+	que tienen en cuenta tanto la frecuencia del término en el documento como en el conjunto de
+	documentos.
+
 
 \section{Arquitectura básica del Proyecto}
 Durante el desarrollo de la aplicación fueron creadas las clases:
@@ -118,8 +154,8 @@ Al introducir la búsqueda (query) deseada y hacer click en el botón “Buscar�
 búsqueda \textbf{NO} vacía, se aplicará una normalización a la misma, eliminando todos los
 caracteres especiales no relevantes para el procesamiento, utilizando el método \textbf{Clean} de la
 clase \textbf{Reader}. Luego se ubicará cada palabra normalizada de la query en el
-diccionario \textbf{QueryWeight} mediante el método \textbf{FeedQueryWeight} (ambos pertenecientes a la clase 
-\textbf{Search}), donde a cada palabra se le asociará su peso. El cálculo del peso de cada término de la query 
+diccionario \textbf{QueryWeight} mediante el método \textbf{FeedQueryWeight} (ambos pertenecientes a la clase
+\textbf{Search}), donde a cada palabra se le asociará su peso. El cálculo del peso de cada término de la query
 está dado por la siguiente fórmula:
 $$
 	W_{ij}=(\alpha +(1-\alpha )\frac{freq_{iq}}{max_{l}freq_{lq}})\lg_{10}{(\frac{N}{n_{i}})}
@@ -153,12 +189,12 @@ procederá de la siguiente forma en caso de existir algún/unos de ellos:
 \begin{itemize}
 	\item \textbf{!} Operador de \textbf{NO Aparición}: Si alguna palabra presenta este operador, todo documento que
 	      la contenga será automáticamente descartado de los resultados finales.
-	\item \textbf{$\wedge$} Operador de Solo Aparición: Si alguna palabra presenta este operador, todo documento que no
+	\item \textbf{$\wedge$} Operador de \textbf{Solo Aparición}: Si alguna palabra presenta este operador, todo documento que no
 	      la contenga será automáticamente descartado de los resultados finales.
-	\item \textbf{*} Operador de Importancia: Si alguna palabra presenta este operador, todo documento que
+	\item \textbf{*} Operador de \textbf{Importancia}: Si alguna palabra presenta este operador, todo documento que
 	      la contenga adquirirá mayor relevancia en dependencia de la cantidad de operadores ‘*’ que la
 	      precedan, para llevar este conteo se utiliza el método \textbf{Charcounter} de la clase \textbf{Operators}.
-	\item \textbf{$\sim $} Operador de Cercanía: Si la palabra que lo posee es la primera de
+	\item \textbf{$\sim $} Operador de \textbf{Cercanía}: Si la palabra que lo posee es la primera de
 	      la búsqueda, este será ignorado puesto que se tienen en cuenta tanto la palabra
 	      precedida del operador de cercanía, como su antecesora. En cualquier otro caso se
 	      determinará la distancia entre ambas palabras mediante el método \textbf{Distance} de la
@@ -168,10 +204,6 @@ procederá de la siguiente forma en caso de existir algún/unos de ellos:
 \end{itemize}
 
 \newpage
-
-
-
-
 
 \begin{figure}
 
@@ -191,7 +223,7 @@ procederá de la siguiente forma en caso de existir algún/unos de ellos:
 			al aplicar el método \textbf{EditDistance}, la palabra con mayor similitud a la primera
 			palabra de nuestra búsqueda.
 	\end{itemize}
-	
+
 	\section*{Manual de Usuario:}
 	\begin{flushleft}
 		Al iniciar Moogle! y acceder a la página se nos muestra como en la siguiente imagen:

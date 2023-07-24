@@ -63,7 +63,7 @@ public class Operators
     }
 
     //Trabajo con Operadores
-    public static void Process(string[] queryops, string[] cleanquery, Dictionary<string, Dictionary<string, double>> Files, Dictionary<string, double> Score, Dictionary<string, string> Texts)
+    public static void Process(string[] queryops, string[] cleanquery, Dictionary<string, Dictionary<string, double>> Files, Dictionary<string, double> Results, Dictionary<string, string> Texts)
     {
         for (int i = 0; i < queryops.Length; i++)
         {
@@ -76,8 +76,8 @@ public class Operators
                     {
                         //  Analizo cada documento de mi diccionario Files
                         //  en caso de contener la palabra, remuevo el doc
-                        //  de mi diccionario de Scores.
-                        Score.Remove(file.Key);
+                        //  de mi diccionario de Results.
+                        Results.Remove(file.Key);
                     }
                 }
             }
@@ -90,8 +90,8 @@ public class Operators
                     {
                         //  Analizo cada documento de mi diccionario Files
                         //  en caso de NO contener la palabra, remuevo el doc
-                        //  de mi diccionario de Scores.
-                        Score.Remove(file.Key);
+                        //  de mi diccionario de Resultss.
+                        Results.Remove(file.Key);
                     }
                 }
             }
@@ -100,13 +100,13 @@ public class Operators
             {
                 foreach (var file in Files)
                 {
-                    if (Files[file.Key].ContainsKey(cleanquery[i]) && Score.ContainsKey(file.Key))
+                    if (Files[file.Key].ContainsKey(cleanquery[i]) && Results.ContainsKey(file.Key))
                     {
                         //  Analizo cada documento de mi diccionario Files
                         //  en caso de contener la palabra, aumento el valor
                         //  de su puntuacion en el doble de la cantidad de veces
                         //  que aparezca el caracter '*' repetido.
-                        Score[file.Key] = Score[file.Key] + (Charcounter(queryops[i]) * 2);
+                        Results[file.Key] = Results[file.Key] + (Charcounter(queryops[i]) * 2);
                     }
                 }
             }
@@ -136,12 +136,12 @@ public class Operators
                             //  En caso de que la expresion evalue True
                             //  Hallo la distancia entre las palabras en el texto
                             //  con el metodo Distance y aumento en 10 la puntuacion
-                            //  del doc en Score.   
-                            Score[file.Key] = Score[file.Key] + 1.5;
+                            //  del doc en Results.   
+                            Results[file.Key] = Results[file.Key] + 1.5;
                         }
                         else if(file.Value.Contains(w1) && file.Value.Contains(w2) && Distance(file.Value,w1,w2)>10)
                         {
-                            Score[file.Key] = Score[file.Key] + 1.0;
+                            Results[file.Key] = Results[file.Key] + 1.0;
                         }
                     }
                 }

@@ -11,7 +11,7 @@ namespace MoogleEngine
 
         //  Diccionario donde almacenare cada documento con su texto correspondiente.
         public static Dictionary<string, string> Texts = new Dictionary<string, string>();
-
+        
         public static void Feed()
         {
             Stopwatch crono = new Stopwatch();

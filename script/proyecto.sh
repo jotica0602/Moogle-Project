@@ -28,7 +28,7 @@ function slides(){
     echo -e "\e[32mBuilding Slides...\e[0m"
     cd ..
     cd Presentacion
-    #compilar presentacion
+    latexmk -pdf Presentacion.tex
     clear
     echo -e "\e[32mBuilt Slides.\e[0m"
     cd ..
@@ -50,9 +50,7 @@ function show_slides(){
     echo -e "\e[32mShowing Slides...\e[0m"
     cd ..
     cd Presentacion
-    #xdg-open Presentacion
-    cd ..
-    cd script
+    xdg-open Presentacion.pdf
 }
 
 function clean(){
@@ -63,7 +61,10 @@ function clean(){
     rm Informe.aux Informe.fdb_latexmk Informe.fls Informe.log
     cd ..
     cd Presentacion
-    #rm Borrar temporales de la presentacion
+    rm Presentacion.aux Presentacion.fdb_latexmk Presentacion.fls Presentacion.log Presentacion.nav Presentacion.snm Presentacion.toc
+    cd sections
+    rm arch.aux dataflow.aux intro.aux
+    cd ..
     clear
     echo -e "\e[32mTemporal Files Cleaned.\e[0m"
     cd ..
@@ -113,7 +114,10 @@ function interactive(){
                 ;;
             5)
                 show_slides
+                start Presentacion.pdf
                 echo -e "\e[32mPress Enter to continue\e[0m"
+                cd ..
+                cd script
                 read
                 ;;
             6)
@@ -167,6 +171,7 @@ case $execute in
         ;;
     show_slides)
         show_slides
+        start Presentacion.pdf
         ;;
     clean)
         clean
