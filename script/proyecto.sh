@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Execution Functions
 function run(){
     echo
@@ -183,10 +182,3 @@ case $execute in
         echo
         echo -e "\e[31mWRONG FUNCTION...\e[0m"
 esac
-
-
-
-
-
-
-
