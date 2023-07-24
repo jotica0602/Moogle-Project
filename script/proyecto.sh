@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Execution Functions
+
 function run(){
     echo
     echo -e "\e[32mLaunching Moogle!...\e[0m"
