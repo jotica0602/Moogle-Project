@@ -108,7 +108,6 @@ function interactive(){
                 ;;	
             4)
                 show_report
-                start Informe.pdf
                 echo -e "\e[32mPress Enter to continue\e[0m"
                 cd ..
                 cd script
@@ -116,7 +115,6 @@ function interactive(){
                 ;;
             5)
                 show_slides
-                start Presentacion.pdf
                 echo -e "\e[32mPress Enter to continue\e[0m"
                 cd ..
                 cd script
@@ -169,11 +167,9 @@ case $execute in
         ;;
     show_report)
         show_report
-        start Informe.pdf
         ;;
     show_slides)
         show_slides
-        start Presentacion.pdf
         ;;
     clean)
         clean
