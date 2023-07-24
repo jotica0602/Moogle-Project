@@ -58,10 +58,10 @@ function clean(){
     echo -e "\e[32mCleaning Temporal Files...\e[0m"
     cd ..
     cd Informe
-    rm Informe.aux Informe.fdb_latexmk Informe.fls Informe.log
+    rm Informe.aux Informe.fdb_latexmk Informe.fls Informe.log indent.log pdflatex32230.fls Informe.synctex.gz
     cd ..
     cd Presentacion
-    rm Presentacion.aux Presentacion.fdb_latexmk Presentacion.fls Presentacion.log Presentacion.nav Presentacion.snm Presentacion.toc
+    rm Presentacion.aux Presentacion.fdb_latexmk Presentacion.fls Presentacion.log Presentacion.nav Presentacion.snm Presentacion.toc Presentacion.out Presentacion.synctex.gz
     cd sections
     rm arch.aux dataflow.aux intro.aux
     cd ..
