@@ -4,7 +4,7 @@
 
 # Execution Functions
 
-function run(){
+ run(){
     echo
     echo -e "\e[32mLaunching Moogle!...\e[0m"
     cd ..
@@ -14,7 +14,7 @@ function run(){
     cd script
 }
 
-function report(){
+ report(){
     echo
     echo -e "\e[32mBuilding Report...\e[0m"
     cd ..
@@ -26,7 +26,7 @@ function report(){
     cd script
 }
 
-function slides(){
+ slides(){
     echo
     echo -e "\e[32mBuilding Slides...\e[0m"
     cd ..
@@ -38,7 +38,7 @@ function slides(){
     cd script
 }
 
-function show_report(){
+ show_report(){
     clear
     echo
     echo -e "\e[32mShowing Report...\e[0m"
@@ -47,7 +47,7 @@ function show_report(){
     xdg-open Informe.pdf
 }
 
-function show_slides(){
+ show_slides(){
     clear
     echo
     echo -e "\e[32mShowing Slides...\e[0m"
@@ -56,7 +56,7 @@ function show_slides(){
     xdg-open Presentacion.pdf
 }
 
-function clean(){
+ clean(){
     echo
     echo -e "\e[32mCleaning Temporal Files...\e[0m"
     cd ..
@@ -76,7 +76,7 @@ function clean(){
 }
 
 # Interactive Function
-function interactive(){
+ interactive(){
     while true; do
         clear
         echo "Type the option number you want to perform:"
