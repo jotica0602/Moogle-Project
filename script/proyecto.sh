@@ -1,9 +1,8 @@
 #!/bin/bash
-
 # return to .sh folder
 goback(){
     cd ..
-    cd Script
+    cd script
 }
 
 # execution Functions
@@ -13,7 +12,7 @@ run(){
     dotnet watch run --project MoogleServer
     clear
     echo -e "\e[31mStopped Moogle! Execution.\e[0m"
-    cd Script
+    cd script
 }
 
 report(){
@@ -180,4 +179,5 @@ if [ "$execute" = "" ]; then
     done
     exit 1
 fi
+
 "$@"
