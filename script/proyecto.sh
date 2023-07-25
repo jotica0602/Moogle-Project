@@ -52,7 +52,7 @@ show_report(){
             echo "No se pudo determinar el sistema operativo compatible."
         fi
     else
-        #user specified visualizer
+        # user specified visualizer
         visualizador="$2"
         shift
         "$visualizador" Informe.pdf
