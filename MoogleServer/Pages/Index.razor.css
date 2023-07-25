@@ -1,7 +1,9 @@
 .results {
     text-align: left;
 }
-
+ul.results div {
+    text-align: left;   
+}
 .item .title {
     font-size: large;
     font-weight: bold;
