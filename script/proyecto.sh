@@ -7,7 +7,6 @@ goback(){
 }
 
 # execution Functions
-
 run(){
     echo -e "\e[32mLaunching Moogle!...\e[0m"
     cd ..
