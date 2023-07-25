@@ -1,10 +1,6 @@
 #!/bin/bash
-
-
-
 # Execution Functions
-
- run(){
+run(){
     echo
     echo -e "\e[32mLaunching Moogle!...\e[0m"
     cd ..
@@ -14,7 +10,7 @@
     cd script
 }
 
- report(){
+report(){
     echo
     echo -e "\e[32mBuilding Report...\e[0m"
     cd ..
@@ -26,7 +22,7 @@
     cd script
 }
 
- slides(){
+slides(){
     echo
     echo -e "\e[32mBuilding Slides...\e[0m"
     cd ..
@@ -38,16 +34,32 @@
     cd script
 }
 
- show_report(){
+show_report(){
     clear
     echo
     echo -e "\e[32mShowing Report...\e[0m"
-    cd .. 
+    cd ..
     cd Informe
-    xdg-open Informe.pdf
+    if [ -z "$1" ]; then
+        # default OS visualizer
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            xdg-open Informe.pdf
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            open Informe.pdf
+        elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+            start Informe.pdf
+        else
+            echo "No se pudo determinar el sistema operativo compatible."
+        fi
+    else
+        # user specified visualizer
+        visualizador="$2"
+        shift
+        "$visualizador" Informe.pdf
+    fi
 }
 
- show_slides(){
+show_slides(){
     clear
     echo
     echo -e "\e[32mShowing Slides...\e[0m"
@@ -56,7 +68,7 @@
     xdg-open Presentacion.pdf
 }
 
- clean(){
+clean(){
     echo
     echo -e "\e[32mCleaning Temporal Files...\e[0m"
     cd ..
@@ -76,7 +88,7 @@
 }
 
 # Interactive Function
- interactive(){
+interactive(){
     while true; do
         clear
         echo "Type the option number you want to perform:"
@@ -179,6 +191,5 @@ case $execute in
         interactive
         ;;
     *)
-        echo
         echo -e "\e[31mWRONG FUNCTION...\e[0m"
 esac
