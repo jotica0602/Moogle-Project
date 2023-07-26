@@ -50,14 +50,29 @@ show_report(){
     cd ..
     cd Informe
     # default OS pdf viewer
-    if [ -z "$1" ];
-    then
+
+    if [ -z "$1" ]; then
         echo -e "\e[33mDefault pdf viewer.\e[0m"
-        xdg-open Informe.pdf
-    # user specified pdf viewer
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            xdg-open Informe.pdf
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            open Informe.pdf
+        elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+            start Informe.pdf
+        else
+            echo -e "\e[32mUnknown OS.\e[0m"
+        fi
     else
         echo -e "\e[33mUser specified pdf viewer.\e[0m"
-        $1 Informe.pdf
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            $1 Informe.pdf
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            open -a $1 Informe.pdf
+        elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+            start $1 Informe.pdf
+        else
+            echo -e "\e[32mUnknown OS.\e[0m"
+        fi
     fi
 }
 
@@ -75,16 +90,31 @@ show_slides(){
     cd ..
     cd Presentacion
     echo -e "\e[32mShowing Slides...\e[0m"
+
     # default OS slides viewer
-    if [ -z "$1" ];
-    then
-        echo -e "\e[33mDefault slides viewer.\e[0m"
-        xdg-open Presentacion.pdf
-    # user specified slides viewer
+    if [ -z "$1" ]; then
+        echo -e "\e[33mDefault pdf viewer.\e[0m"
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            xdg-open Presentacion.pdf
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            open Presentacion.pdf
+        elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+            start Presentacion.pdf
+        else
+            echo -e "\e[32mUnknown OS.\e[0m"
+        fi
     else
-        echo -e "\e[33mUser specified slides viewer.\e[0m"
-        $1 Presentacion.pdf
-    fi    
+        echo -e "\e[33mUser specified pdf viewer.\e[0m"
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            $1 Presentacion.pdf
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+            open -a $1 Presentacion.pdf
+        elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+            start $1 Presentacion.pdf
+        else
+            echo -e "\e[32mUnknown OS.\e[0m"
+        fi
+    fi
 }
 
 clean(){
